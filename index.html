@@ -7,7 +7,7 @@
 <style>
   body {
     margin: 0;
-    background: black;
+    background: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,83 +17,60 @@
 
   .clock {
     display: flex;
-    gap: 14px;
-    align-items: flex-end;
-  }
-
-  .unit {
-    display: flex;
-    flex-direction: column;
     align-items: center;
+    gap: 14px;
   }
 
   .card {
     position: relative;
-    width: 80px;
-    height: 110px;
-    border-radius: 14px;
+    width: 110px;
+    height: 160px;
+    background: black;
+    border-radius: 22px;
     overflow: hidden;
-    box-shadow: 0 0 12px rgba(255, 0, 107, 0.35);
+    box-shadow: 0 0 14px rgba(255, 0, 107, 0.35);
   }
 
-  .card div {
+  .number {
     position: absolute;
     width: 100%;
-    height: 50%;
-    background: black;
+    height: 100%;
     color: #ff006b;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 54px;
+    font-size: 96px;
     font-weight: 600;
-    border: 1px solid #ff006b;
-    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .top {
-    top: 0;
-    border-bottom: none;
-  }
-
-  .bottom {
-    bottom: 0;
-    border-top: none;
-  }
-
-  .label {
-    margin-top: 6px;
-    font-size: 12px;
-    letter-spacing: 1px;
-    color: #ff006b;
-    opacity: 0.8;
+  .split {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #ff006b;
+    opacity: 0.9;
   }
 
   .ampm {
-    font-size: 22px;
+    font-size: 26px;
     color: #ff006b;
-    margin-left: 10px;
-    margin-bottom: 6px;
+    margin-left: 8px;
+    align-self: flex-end;
   }
 </style>
 </head>
 
 <body>
   <div class="clock">
-    <div class="unit">
-      <div class="card">
-        <div class="top" id="h-top">12</div>
-        <div class="bottom" id="h-bot">12</div>
-      </div>
-      <div class="label">HRS</div>
+    <div class="card">
+      <div class="number" id="hours">12</div>
+      <div class="split"></div>
     </div>
 
-    <div class="unit">
-      <div class="card">
-        <div class="top" id="m-top">00</div>
-        <div class="bottom" id="m-bot">00</div>
-      </div>
-      <div class="label">MIN</div>
+    <div class="card">
+      <div class="number" id="minutes">00</div>
+      <div class="split"></div>
     </div>
 
     <div class="ampm" id="ampm">AM</div>
@@ -108,13 +85,10 @@
     const ampm = h >= 12 ? 'PM' : 'AM';
     h = h % 12 || 12;
 
-    const hh = h.toString().padStart(2, '0');
-    const mm = m.toString().padStart(2, '0');
-
-    document.getElementById('h-top').textContent = hh;
-    document.getElementById('h-bot').textContent = hh;
-    document.getElementById('m-top').textContent = mm;
-    document.getElementById('m-bot').textContent = mm;
+    document.getElementById('hours').textContent =
+      h.toString().padStart(2, '0');
+    document.getElementById('minutes').textContent =
+      m.toString().padStart(2, '0');
     document.getElementById('ampm').textContent = ampm;
   }
 
