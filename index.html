@@ -134,9 +134,13 @@
     document.getElementById('ampm').textContent = ampm;
 
     if (m !== lastMinute) {
-      flip('h', hh);
       flip('m', mm);
       lastMinute = m;
+    }
+    
+    if (h !== lastHour) {
+      flip('h', hh);
+      lastHour = h;
     }
   }
 
