@@ -5,22 +5,14 @@
 <title>Flip Clock</title>
 
 <style>
-  html, body {
+  body {
     margin: 0;
-    padding: 0;
-    background-color: rgba(0,0,0,0) !important;
-    width: 100%;
-    height: 100%;
-    font-family: 'Inter', sans-serif;
-  }
-
-  /* wrapper zamiast flexa na body */
-  .wrapper {
-    width: 100%;
-    height: 100%;
+    background: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    font-family: 'Inter', sans-serif;
   }
 
   .clock {
@@ -49,7 +41,7 @@
   .bottom {
     position: absolute;
     width: 100%;
-    height: 1000%;
+    height: 50%;
     background: #ff006b;
     color: black;
     font-size: 120px;
@@ -60,8 +52,13 @@
     backface-visibility: hidden;
   }
 
-  .top { top: 0; }
-  .bottom { bottom: 0; }
+  .top {
+    top: 0;
+  }
+
+  .bottom {
+    bottom: 0;
+  }
 
   .split {
     position: absolute;
@@ -70,17 +67,6 @@
     height: 1.5px;
     background: white;
     z-index: 5;
-  }
-
-  .ampm {
-    position: absolute;
-    bottom: 10px;
-    left: 12px;
-    font-size: 18px;
-    color: black;
-    font-weight: 600;
-    z-index: 10;
-    pointer-events: none;
   }
 
   .flip.animate .top {
@@ -92,45 +78,46 @@
   }
 
   @keyframes flipTop {
-    from { transform: rotateX(0deg); }
-    to   { transform: rotateX(-90deg); }
+    0% { transform: rotateX(0deg); }
+    100% { transform: rotateX(-90deg); }
   }
 
   @keyframes flipBottom {
-    from { transform: rotateX(90deg); }
-    to   { transform: rotateX(0deg); }
+    0% { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+  }
+
+  .ampm {
+    font-size: 30px;
+    color: #ff006b;
+    margin-left: 10px;
+    align-self: flex-end;
   }
 </style>
 </head>
 
 <body>
-  <div class="wrapper">
-    <div class="clock">
-
-      <!-- HOURS -->
-      <div class="card">
-        <div class="flip" id="hours-card">
-          <div class="top" id="h-top">12</div>
-          <div class="bottom" id="h-bot">12</div>
-          <div class="split"></div>
-          <div class="ampm" id="ampm">AM</div>
-        </div>
+  <div class="clock">
+    <div class="card">
+      <div class="flip" id="hours-card">
+        <div class="top" id="h-top">12</div>
+        <div class="bottom" id="h-bot">12</div>
+        <div class="split"></div>
       </div>
-
-      <!-- MINUTES -->
-      <div class="card">
-        <div class="flip" id="minutes-card">
-          <div class="top" id="m-top">00</div>
-          <div class="bottom" id="m-bot">00</div>
-          <div class="split"></div>
-        </div>
-      </div>
-
     </div>
+
+    <div class="card">
+      <div class="flip" id="minutes-card">
+        <div class="top" id="m-top">00</div>
+        <div class="bottom" id="m-bot">00</div>
+        <div class="split"></div>
+      </div>
+    </div>
+
+    <div class="ampm" id="ampm">AM</div>
   </div>
 
 <script>
-  let lastHour = null;
   let lastMinute = null;
 
   function updateClock() {
@@ -139,8 +126,6 @@
     const m = now.getMinutes();
 
     const ampm = h >= 12 ? 'PM' : 'AM';
-    const rawHour = h;
-
     h = h % 12 || 12;
 
     const hh = h.toString().padStart(2, '0');
@@ -148,15 +133,11 @@
 
     document.getElementById('ampm').textContent = ampm;
 
-    if (rawHour !== lastHour) {
+    if (m !== lastMinute) {
       flip('h', hh);
       flip('m', mm);
-    } else if (m !== lastMinute) {
-      flip('m', mm);
+      lastMinute = m;
     }
-
-    lastHour = rawHour;
-    lastMinute = m;
   }
 
   function flip(unit, value) {
@@ -171,7 +152,7 @@
     bot.textContent = value;
 
     card.classList.remove('animate');
-    void card.offsetWidth;
+    void card.offsetWidth; // restart animation
     card.classList.add('animate');
   }
 
