@@ -7,7 +7,7 @@
 <style>
   body {
     margin: 0;
-    background: dark;
+    background: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -172,6 +172,16 @@
 
   updateClock();
   setInterval(updateClock, 1000);
+  
+  app.disableHardwareAcceleration();
+
+app.on('ready', () => {
+  setTimeout(() => {
+    createWindow();
+    autoUpdater.checkForUpdatesAndNotify();
+    createMenu();
+  }, 50);
+  });
 </script>
 </body>
 </html>
